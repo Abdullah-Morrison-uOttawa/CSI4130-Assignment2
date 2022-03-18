@@ -63,6 +63,16 @@ function init() {
     // setup the control gui
     var controls = new function () {
         this.camera = -10
+        this.switchCamera = function(){
+            if(camera.position.z == 0){
+                camera.position.z = 200
+                camera.position.y = 55 
+            }else{
+                camera.position.z = 0
+                camera.position.y = 200
+            }
+            camera.lookAt(scene.position);
+        }
         this.redraw = function () {
             camera.lookAt(scene.position);
         };
@@ -70,6 +80,7 @@ function init() {
 
 
     var gui = new dat.GUI();
+    gui.add(controls, 'switchCamera')
     gui.add(camera.position, 'x', -360, 360).onChange(controls.redraw);
     gui.add(camera.position, 'y', -360, 360).onChange(controls.redraw);
     gui.add(camera.position, 'z', 0, 360 ).onChange(controls.redraw);

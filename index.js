@@ -1,12 +1,4 @@
-// initialization of Three.js
 function init() {
-    // Check if WebGL is available see Three/examples
-    // No need for webgl2 here - change as appropriate
-    // if (WEBGL.isWebGLAvailable() === false) {
-    //     // if not print error on console and exit
-    //     document.body.appendChild(WEBGL.getWebGLErrorMessage());
-    // }
-    // add our rendering surface and initialize the renderer
     var container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -21,11 +13,6 @@ function init() {
     info.innerHTML = "row 0<br>row 1<br>row 2<br>row 3";
     container.appendChild(info);
 
-
-    // WebGL2 examples suggest we need a canvas
-    // canvas = document.createElement( 'canvas' );
-    // var context = canvas.getContext( 'webgl2' );
-    // var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context } );
     renderer = new THREE.WebGLRenderer();
     // set some state - here just clear color
     renderer.setClearColor(new THREE.Color(0x333333));
@@ -46,7 +33,7 @@ function init() {
     // Solar system group
     var solar = new THREE.Group();
     scene.add(solar)
-        // sun is a child
+    // sun is a child
     var faceMaterial = new THREE.MeshBasicMaterial({ color: 'yellow' });
     var sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
     sun = new THREE.Mesh(sphereGeometry, faceMaterial);
@@ -75,37 +62,6 @@ function init() {
     // Set position on top of earth
     teapot.position.set(0, 3, 0);
     earthGroup.add(teapot);
-
-    // saturn and group
-    var saturnRotGroup = new THREE.Group()
-    saturnRotGroup.rotation.y = Math.PI / 2;
-    solar.add(saturnRotGroup)
-    var saturnGroup = new THREE.Group()
-        // position the saturn relative to sun but offset 30deg rel to earth
-    saturnGroup.position.set(35 * Math.cos(Math.PI / 6), 35 * Math.sin(Math.PI / 6), 0);
-    saturnRotGroup.add(saturnGroup)
-
-    var faceMaterial_saturn = new THREE.MeshBasicMaterial({ color: 'saddlebrown' });
-    var sphereGeometry_saturn = new THREE.SphereGeometry(3, 16, 16);
-    var saturn = new THREE.Mesh(sphereGeometry_saturn, faceMaterial_saturn);
-    // add the saturn to the sun - saturn rotates around sun
-    saturnGroup.add(saturn);
-
-    // Adding a ring around saturn
-    torusGeometry = new THREE.TorusGeometry(4, 0.5, 32, 16);
-    var torus = new THREE.Mesh(torusGeometry,
-        new THREE.MeshBasicMaterial({ color: 'dimgray' }));
-    // scale
-    torus.scale.z = 0.1
-    saturnGroup.add(torus); // as torus should rotate with saturn
-
-    // Create Moon with 15 deg offest to torus ring
-    var faceMaterial_moon = new THREE.MeshBasicMaterial({ color: 'wheat' });
-    var sphereGeometry_moon = new THREE.SphereGeometry(0.5, 8, 8);
-    var moon = new THREE.Mesh(sphereGeometry_moon, faceMaterial_moon);
-
-    moon.position.set(6 * Math.cos(Math.PI / 12), 6 * Math.sin(Math.PI / 12), 0);
-    saturnGroup.add(moon);
 
     // need a camera to look at things
     // calcaulate aspectRatio
@@ -197,16 +153,11 @@ function init() {
         // render using requestAnimationFrame - register function
         requestAnimationFrame(render);
         speed = 2 ** controls.speed
-            // earth group rotates arond sun
+        // earth group rotates arond sun
         earthRotGroup.rotation.z = (earthRotGroup.rotation.z + 3 * speed) % (2.0 * Math.PI);
         // Teapot has to compensate to stay on top of earth
         earthGroup.rotation.z = (earthGroup.rotation.z - 3 * speed) % (2.0 * Math.PI);
         // console.log(earthRotGroup.rotation.z , earthGroup.rotation.z)
-        // saturn group rotates arond sun
-        saturnRotGroup.rotation.z = (saturnRotGroup.rotation.z + speed) % (2.0 * Math.PI);
-        // saturn ring and moon rotate around saturn
-        saturnGroup.rotation.x = (saturnGroup.rotation.x + 5 * speed) % (2.0 * Math.PI);
-        saturnGroup.rotation.y = (saturnGroup.rotation.y + 5 * speed) % (2.0 * Math.PI);
         // Todo: Make sure to look at Earth (moves!) or Sun (does not move)
         updateAt(center)
 
@@ -223,7 +174,6 @@ function onResize() {
     } else {
         // ToDo: Must update projection matrix
         camera = new THREE.OrthographicCamera(szScreen * aspect / -2, szScreen * aspect / 2, szScreen / 2, szScreen / -2, -500, 500);
-
     }
     camera.updateProjectionMatrix();
     // If we use a canvas then we also have to worry of resizing it

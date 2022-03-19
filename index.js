@@ -30,22 +30,15 @@ function init() {
     var axes = new THREE.AxesHelper(10);
     scene.add(axes);
 
-    // Solar system group
-    var solar = new THREE.Group();
-    scene.add(solar)
-
-    // Adding teapot to the earth
-    // var teapotGeometry = new THREE.TeapotBufferGeometry(1, 15, true, true, true, false, false);
+    // Adding teapot
     var teapotGeometry = new THREE.TeapotGeometry(5, 15, true, true, true, false, false);
     var teapot = new THREE.Mesh(teapotGeometry, new THREE.MeshBasicMaterial({ color: 'pink' }));
-    // Set position on top of earth
     teapot.position.set(0, 0, 0);
-    solar.add(teapot);
+    scene.add(teapot);
 
     // need a camera to look at things
     // calcaulate aspectRatio
     var aspectRatio = window.innerWidth / window.innerHeight;
-    var width = 20;
     // Camera needs to be global
     camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 1000);
     // position the camera back and point to the center of the scene
@@ -57,9 +50,6 @@ function init() {
     // render the scene
     renderer.render(scene, camera);
 
-    //declared once at the top of your code
-    var camera_axis = new THREE.Vector3(-30,30,30).normalize(); // viewing axis
-    
     // setup the control gui
     var controls = new function () {
         this.camera = -10
@@ -90,8 +80,6 @@ function init() {
     function render() {
         // render using requestAnimationFrame - register function
         requestAnimationFrame(render);
-
-
 
         renderer.render(scene, camera);
     }
